@@ -1,0 +1,209 @@
+---
+title: "Untitled"
+author: "Joe Powers"
+date: "8/14/2018"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+```
+
+## R code 0.1
+```{r}
+print( "All models are wrong, but some are useful." )
+
+## R code 0.2
+x <- 1:2
+x <- x*10
+x <- log(x)
+x <- sum(x)
+x <- exp(x)
+x
+
+## R code 0.3
+( log( 0.01^200 ) )
+( 200 * log(0.01) )
+
+## R code 0.4
+# Load the data:
+# car braking distances in feet paired with speeds in km/h
+# see ?cars for details
+data(cars)
+
+# fit a linear regression of distance on speed
+m <- lm( dist ~ speed , data=cars )
+
+# estimated coefficients from the model
+coef(m)
+
+# plot residuals against speed
+plot( resid(m) ~ speed , data=cars )
+
+## R code 0.5
+install.packages(c("coda","mvtnorm","devtools"))
+library(devtools)
+devtools::install_github("rmcelreath/rethinking")
+
+## R code 2.1
+ways <- c( 0 , 3 , 8 , 9 , 0 )
+ways/sum(ways)
+
+## R code 2.2
+dbinom( 6 , size=9 , prob=0.5 )
+```
+
+# CHapter 2
+
+We navigate between the small world of our model and the larger "real" world. The small world of our model is logical and self-contained. The larger world is the context where the small-world model is deployed. The large world has events and features not captured in the small-world model, so performance can only be demonstrated by real-wrold applicaiton not logically deduced from the small-world model. 
+
+**Chapter 2 focuses on the small world.** In its essential form, probability theory counts the number of ways things can happen, and Bayesian inference arises naturally from this perspective. *This chapter provides a foundation for Ch 3 where you will learn ot summarize bayesian estimates.*
+
+Animals cannot be Bayesian. They apply efficient heuristics, but cannot discover and judge the relevance of new sources of information. Bayesian analysis provides a general way to discover and judge the relevance of new sources of information so that they can be processed logically. 
+
+At its core, Bayesian inference is about counting and comparing the number of possible ways to arrive at a set of observations (i.e., data).
+
+Knowledge of what did happen will prune away paths that are now logically impossible. Thus we can guarantee that we will be able to rank the most likely source of our observations given the information we've considered. 
+
+## 2.3
+You can derive the likelihood by nominating all possible events that could be observed in the data. In our case those events are land (L) and water (W). Next you need to say how likely your sample is. In our case, because we've assumed our data are independent and the probability of an event is the same on every observation, we know that we are dealing with a *binomial distribution*.
+
+## R code 2.3
+```{r}
+# define grid
+p_grid <- seq( from=0 , to=1 , length.out=20 )
+
+# define prior
+prior <- rep( 1 , 20 )
+
+# compute likelihood at each value in grid
+likelihood <- dbinom( 6 , size=9 , prob=p_grid )
+
+plot(likelihood)
+
+# compute product of likelihood and prior
+unstd.posterior <- likelihood * prior
+
+# standardize the posterior, so it sums to 1
+posterior <- unstd.posterior / sum(unstd.posterior)
+```
+
+Bayesian models have 4 elements that they use to estimate the `posterior plausibility` of different conjectures given the data and prior. 
+
+1) `Parameters` are the quantities we wish to estimate. Examples of parameters include the proportion of blue marbles in a bag or the proportion of the globe covered in water. 
+
+2) The `likelihood` is a formula used to calculate the plausibility of the data at each parameter value. 
+
+3) The `prior` plausibility is the initial plausibility for each possible parameter value. This can include previous estimates. If choosing a prior in total ignorance, choose a uniform prior, but often a *weakly informative prior* is preferable. Priors constrain parameters to reasonable ranges while expressing our past knowledge about those parameters. 
+    - Interogate priors by deliberately altering them to see how much your inferences depend on and change with your priors. 
+
+4) The `posterior` distribution is the resulting estimates of each parameter value conditional on the data. It is proportional to the prior and the likelihood, extending and unifying the counting logic of each. 
+
+(See 2.3.4 for Bayes Theorum formula in detail)
+
+## 2.4 
+
+Various mathematical techniques are used to approximate the mathematics that follwo from Bayes Theorum. In this book we review 3: 
+
+1) Grid Approximation
+
+2) Quadratic Approximation
+
+3) Markov chain Monte Carlo (MCMC)
+
+### 2.4.1
+Grid approximation is intuitive but scales poorly. 
+
+A finite grid of parameter values can well approximate the infinite number of values in a continuous posterior distribution. Just multiply the prior probability of *p'* by the likelihood of *p'* given the data.
+
+```{r}
+## R code 2.4
+plot( p_grid , posterior , type="b" ,
+    xlab="probability of water" , ylab="posterior probability" )
+mtext( "20 points" )
+```
+
+Here is the recipe: 
+
+(1) *Define the grid* by deciding how many points to use in estimating the posterior, and then listing the parameter values on the grid. 
+
+(2) *Compute the value of the prior at each parameter value on the grid.* 
+```{r R code 2.5}
+# define grid
+p_grid <- seq( from=0 , to=1 , length.out=20 )
+
+## Compute the value of the prior at each parameter value on the grid
+## These are just two examples of prior distributions from figure 2.5:
+prior <- ifelse( p_grid < 0.5, 0, 1 )
+plot(prior)
+
+prior <- exp( -5 * abs(p_grid - 0.5) )
+plot(prior)
+```
+
+(3) *Compute the likelihood of the data at each parameter value.*
+
+(4) *Compute the unstandardized posterior at each parameter value*, by multiplying the prior by the likelihood. 
+
+(5) Finally, *standardize the posterior*, by dividing each value by the sum of all values.
+
+### 2.4.2 Quadratic approximation: 
+Under quite general conditions, the region near the peak of the posterior distribution will be nearly “normal” in shape, which is convenient, because such distributions can be described by just two numbers (mean and SD). 
+
+A Gaussian approximation is called “quadratic approximation” because the logarithm of a Gaussian distribution forms a parabola. Works well for linear regression. Much less expensive that grid and MCMC approximation. 
+
+The procedure, which R will happily conduct at your command, contains two steps. 
+
+(1) *Find the posterior mode*. This is usually accomplished by some optimization algorithm, a procedure that virtually “climbs” the posterior distribution, as if it were a mountain. The golem doesn’t know where the peak is, but it does know the slope under its feet.
+
+(2) Once you find the peak of the posterior, you must *estimate the curvature near the peak.* This curvature is sufficient to compute a quadratic approximation of the entire posterior distribution. 
+
+To compute the quadratic approximation for the globe tossing data, we’ll use a tool in the rethinking package: `map()`. The abbreviation MAP stands for MAXIMUM A POSTERIORI, which is just a fancy Latin name for the mode of the posterior distribution. It’s a flexible model fitting tool that will allow us to specify a large number of different regression models. 
+
+```{r}
+## R code 2.6
+# for 6 water events of 9 total events: 
+globe.qa <- 
+  rethinking::map(
+    alist(
+      w ~ dbinom(9, p),   # binomial likelihood
+      p ~ dunif(0, 1)     # uniform prior
+    ),
+    data = list(w = 6) 
+  )
+
+# display summary of quadratic approximation
+globe.qa %>% 
+  rethinking::precis()
+```
+
+"You can read [the output above] like: Assuming the posterior is Gaussian, it is maximized at 0.67, and its standard deviation is 0.16."
+
+```{r}
+## R code 2.7
+
+# analytical calculation
+w <- 24 # water events
+n <- 36 # total events
+curve( dbeta( x , w+1 , n-w+1 ) , from=0 , to=1)
+
+# analytical calculation
+w <- 6 # 6 water events
+n <- 9 # 9 total events
+curve( dbeta( x , w+1 , n-w+1 ) , from=0 , to=1, add=TRUE )
+
+# analytical calculation
+w <- 12 # water events
+n <- 18 # total events
+curve( dbeta( x , w+1 , n-w+1 ) , from=0 , to=1, add=TRUE )
+
+# quadratic approximation
+curve( dnorm( x , 0.67 , 0.16 ) , lty=2, add=TRUE )
+```
+
+### 2.4.3. Markov chain Monte Carlo. There are lots of important model types, like multilevel (mixed-effects) models, for which
+
+
+# Summary: 
+
+The target of inference in Bayesian inference is a posterior.
