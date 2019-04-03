@@ -26,3 +26,24 @@ library(magrittr)
 library(modelr)
 library(tidyverse)
 ```
+
+## 6.2.1 "Establish that joint probability, not average probability, is the right way to judge model accuracy."
+There are 2 major dimensions to consider when defining a target for model optimization: 
+    1. **Cost-benefit analysis**. How high is the cost of an error? How large are the returns for correct predictions? 
+    2. **Accuracy in context**. Some prediction tasks are just easier than others. 
+
+Using *rate of correct prediction* as your target can be problematic when it rewards expensive failures. 
+
+### 6.2.1.1 Costs & Benenfits
+By assigning rewards and penalties to direction of right and wrong predictions you can optimize for better types of accuracy than rate of correct prediction. 
+
+### 6.2.1.2 Measuring Accuracy
+Maximizing joint probability, the probability of a predicition being right given the number of possible scenarios, is different than maximizing the average probability.
+
+How should we describe the distance between a prediction and the observed event/target? The measure of distance should account for the ease of hitting the target. For instance it is easier to hit a target of 2D target (distance and width), than it is to hit a 3D target of distance & width at the right time. 
+
+As more dimensions are added to the target, the potential to miss and the potential to impress have both grown. 
+
+Keep in mind that the best model is not true. The best model provides the right probabilities given our state of ignorance. Probability is in the model not in the world. With complete information we could predict with certainty, but ignorant of many worldly factors we predict from a state of ignorance. A globe toss only seems random. We know that the globe is 70% water and so we use that to inform our model, but we are ignorant of starting point and torque and air resistance so we do not include those factors in the model. The model describes our state of ignorance.
+
+### 6.2.2 Information and uncertainty
