@@ -47,3 +47,49 @@ As more dimensions are added to the target, the potential to miss and the potent
 Keep in mind that the best model is not true. The best model provides the right probabilities given our state of ignorance. Probability is in the model not in the world. With complete information we could predict with certainty, but ignorant of many worldly factors we predict from a state of ignorance. A globe toss only seems random. We know that the globe is 70% water and so we use that to inform our model, but we are ignorant of starting point and torque and air resistance so we do not include those factors in the model. The model describes our state of ignorance.
 
 ### 6.2.2 Information and uncertainty
+Information theory can help us to Measure the distance of a model's accuracy from a target. Information theory frames the question as, "How much is our uncertainty reduced by learning an outcome?" For instance when a predicted event occurs, it is no longer uncertain. The reduction in uncertainty from predicted to occurred is the information gain / the reduction in uncertainty. 
+In this case, **information** is defined as the reduction in uncertainty from learning an outcome. 
+
+We function that will input the probabilities of rain and shine and output a measure of uncertainty about the weather on a future day.
+
+A measure of uncertainty should meet 3 criteria
+    1. The measure of uncertainty should be continuous
+    2. The measure of uncertainty should increase as the number of possible events increases
+    3. The measure of uncertainty should be additive
+    
+The only function that satisfies these three criteria is **Information Entropy**. 
+    `n` is the number of different possible events,
+    each event `i` has probability `p~i~`, 
+    `p` is the list of probabilities, and  
+    the unique measure of uncertainty we seek is:
+```{r Information Entropy, echo=FALSE, out.width="400px", include=TRUE}
+knitr::include_graphics(here::here("static/images/info_entropy.png"))
+```
+
+In plainer words: *The uncertainty contained in a probability distribution is the average log-probability of an event*.
+
+So *H(p)* is our measure of uncertainty. 
+
+For instance, in an area where the p~rain~ = .30 and p~shine~ = .70 we can calculate the information entropy as the average log-probability of all possible events.
+```{r}
+p_rain = .30  
+p_shine = .70
+
+p <- c(p_rain, p_shine)
+
+INFO_ENTRO_rain_30 <- -sum(p*log(p)) %>% round(2)
+```
+
+The information entropy for this area is about `r INFO_ENTRO_rain_30`.
+
+In contrast consider an area where the p~shine~ is .99:
+```{r}
+p_rain = .01  
+p_shine = .99
+
+p <- c(p_rain, p_shine)
+
+INFO_ENTRO_rain_01 <- -sum(p*log(p)) %>% round(2)
+```
+
+The information entropy for this sunny area is about `r INFO_ENTRO_rain_01`.
