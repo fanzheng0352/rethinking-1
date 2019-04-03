@@ -1,0 +1,28 @@
+---
+title: "06.02 Information Theory and Model Performance"
+author: "JP"
+date: "4/3/2019"
+output: html_document
+---
+
+## Overview: 
+To balance between over and underfitting you must first choose a *criterion of model performance*. You must choose a *target* that you want the model to perform well at. Information theory provides a common and useful target, the *out-of-sample deviance*.
+
+The path to understanding the relevance of out-of-sample deviance is not direct. Here are the steps ahead. 
+    1. establish that joint probability, not average probability, is the right way to judge model accuracy. 
+    2. use information theory to establish a measurement scale for distance from perfect accuracy. 
+    3. establish deviance as an approximation of relative distance from perfect accuracy. 
+    4. establish that it is only deviance out-of-sample that is of interest.
+
+```{r global options, include=FALSE}
+knitr::opts_chunk$set(
+  fig.align='center', dpi = 300, 
+  include=FALSE, echo=FALSE, message=FALSE, warning=FALSE
+)
+```
+
+```{r packages and parameters}
+library(magrittr)
+library(modelr)
+library(tidyverse)
+```

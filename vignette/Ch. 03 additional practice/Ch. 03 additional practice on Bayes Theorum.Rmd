@@ -1,0 +1,16 @@
+---
+title: "Practice applying Bayes Theorum"
+output: html_document
+---
+
+http://wwwf.imperial.ac.uk/~atw/Bayes.pdf
+```{r}
+P_EgH <- .95
+P_H <- .005
+P_EgnH <- .1
+
+(P_EgH * P_H) / 
+((P_EgH * P_H) + (P_EgnH * (1 - P_H)))
+
+```
+

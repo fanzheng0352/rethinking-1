@@ -1,0 +1,18 @@
+# 6.4: Information Criteria
+
+## Overview: 
+*Information Criteria* allows us to compare the accuracy of competing models without falling into the trap of favoring the most complex and overfit models. 
+
+```{r global options, include=FALSE}
+knitr::opts_chunk$set(
+  fig.align='center', dpi = 300, 
+  include=FALSE, echo=FALSE, message=FALSE, warning=FALSE
+)
+```
+
+```{r packages and parameters}
+library(kableExtra)
+library(knitr)
+library(tidyverse)
+```
+

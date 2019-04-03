@@ -1,0 +1,55 @@
+# 06.01 R^2^ Review
+
+## Overview: 
+
+Adding parameters will always improve a model's fit as measured by R^2^. 
+
+```{r global options, include=FALSE}
+knitr::opts_chunk$set(
+  fig.align='center', dpi = 150, 
+  include=FALSE, echo=FALSE, message=FALSE, warning=FALSE
+)
+```
+
+```{r packages and parameters, message=FALSE, warning=FALSE}
+library(magrittr)
+library(modelr)
+library(tidyverse)
+```
+
+```{r r2, echo=FALSE, out.width="400px", include=TRUE}
+knitr::include_graphics(here::here("static/images/r2_explained.png"))
+# image from kindle p167
+```
+
+Note that the classic formula for R^2^ seen below is derived from the formula seen above. 
+
+```{r r2v2, echo=FALSE, out.width="200px", include=TRUE}
+knitr::include_graphics(here::here("static/images/r_squared_formula.png"))
+# image from http://www.simages.org/r-squared-formula/
+```
+
+## Explore what large and small R^2^ look like in models of data. 
+
+```{r include=TRUE, echo=TRUE}
+m1 <- lm(mpg ~ drat, data = mtcars)
+rsquare(m1, mtcars)
+
+m3 <- lm(mpg ~ drat + wt + hp, data = mtcars)
+rsquare(m3, mtcars)
+```
+
+### Residuals
+```{r fig.height=3, fig.width=7, include=TRUE, echo=TRUE}
+mtcars %<>% 
+  add_residuals(m1, var = "resid1") %>% 
+  add_residuals(m3, var = "resid3") %>% 
+  gather(resid1, resid3, key = resid_type, value = resid_value)  
+
+ggplot(mtcars) + 
+  geom_hline(yintercept = 0) + 
+  geom_point(aes(x = wt, y = resid_value), color = "red") +
+  facet_grid(~resid_type)
+```
+
+The sum of squared errors (SSE) sums the difference between the actual data and the predicted values. SSE represents unexplained variation

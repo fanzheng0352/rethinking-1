@@ -1,0 +1,1 @@
+https://github.com/cavaunpeu/statistical-rethinking

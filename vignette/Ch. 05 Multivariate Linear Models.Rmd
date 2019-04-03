@@ -94,7 +94,7 @@ fitd5.1 <-
 ggplot(data = fitd5.1, 
        aes(x = MedianAgeMarriage.s, y = Estimate)) +
   theme_bw() +
-  geom_ribbon(aes(ymin = `2.5%ile`, ymax = `97.5%ile`),
+  geom_ribbon(aes(ymin = `Q2.5`, ymax = `Q97.5`),
               fill = "firebrick", alpha = 1/5) +
   geom_line(color = "firebrick4") +
   geom_point(data = d, 
@@ -138,7 +138,7 @@ fitd5.2 <-
 ggplot(data = fitd5.2, 
        aes(x = Marriage.s, y = Estimate)) +
   theme_bw() +
-  geom_ribbon(aes(ymin = `2.5%ile`, ymax = `97.5%ile`),
+  geom_ribbon(aes(ymin = `Q2.5`, ymax = `Q97.5`),
               fill = "firebrick", alpha = 1/5) +
   geom_line(color = "firebrick4") +
   geom_point(data = d, 
@@ -244,7 +244,7 @@ ggplot(data = df54,
   theme(panel.grid = element_blank())     
 ```
 
-We get the residuals with the well-named `residuals()` function. Much like with `brms::fitted()`, `brms::residuals()` returns a four-vector matrix with the number of rows equal to the number of observations in the original data (by default, anyway). The vectors have the familiar names: `Estimate`, `Est.Error`, `2.5%ile`, and `97.5%ile`. See the [brms reference manual](https://cran.r-project.org/web/packages/brms/brms.pdf) for details.
+We get the residuals with the well-named `residuals()` function. Much like with `brms::fitted()`, `brms::residuals()` returns a four-vector matrix with the number of rows equal to the number of observations in the original data (by default, anyway). The vectors have the familiar names: `Estimate`, `Est.Error`, `Q2.5`, and `Q97.5`. See the [brms reference manual](https://cran.r-project.org/web/packages/brms/brms.pdf) for details.
 
 With our residuals in hand, we just need a little more data processing to make Figure 5.4.a.
 
@@ -381,7 +381,7 @@ fitted(b5.3) %>%
   theme_bw() +
   geom_abline(linetype = 2, color = "grey50", size = .5) +
   geom_point(size = 1.5, color = "firebrick4", alpha = 3/4) +
-  geom_linerange(aes(ymin = `2.5%ile`, ymax = `97.5%ile`),
+  geom_linerange(aes(ymin = `Q2.5`, ymax = `Q97.5`),
                  size = 1/4, color = "firebrick4") +
   geom_linerange(aes(ymin = Estimate - Est.Error, ymax = Estimate + Est.Error),
                  size = 1/2, color = "firebrick4") +
@@ -405,8 +405,8 @@ res53 <-
 pred53 <- 
  predict(b5.3) %>%
   as_tibble() %>%
-  transmute(`2.5%ile` = d$Divorce - `2.5%ile`,
-            `97.5%ile` = d$Divorce - `97.5%ile`) %>%
+  transmute(`Q2.5` = d$Divorce - `Q2.5`,
+            `Q97.5` = d$Divorce - `Q97.5`) %>%
   bind_cols(d %>% select(Loc))
 
 # The plot
@@ -414,14 +414,14 @@ ggplot(data = res53,
        aes(x = reorder(Loc, Estimate), y = Estimate)) +
   theme_bw() +
   geom_hline(yintercept = 0, size = 1/2, color = "grey85") +
-  geom_pointrange(aes(ymin = `2.5%ile`, ymax = `97.5%ile`),
+  geom_pointrange(aes(ymin = `Q2.5`, ymax = `Q97.5`),
                   size = 2/5, shape = 20, color = "firebrick4") + 
   geom_segment(aes(y = Estimate - Est.Error, 
                    yend = Estimate + Est.Error,
                    x = Loc, xend = Loc),
                size = 1, color = "firebrick4") +
   geom_segment(data = pred53, 
-               aes(y = `2.5%ile`, yend = `97.5%ile`,
+               aes(y = `Q2.5`, yend = `Q97.5`,
                    x = Loc, xend = Loc),
                size = 3, color = "firebrick4", alpha = 1/10) +
   labs(x = NULL, y = NULL) +
@@ -539,9 +539,9 @@ dffitted.a <-
 ggplot(data = dffitted.a, 
        aes(x = neocortex.perc, y = Estimate)) +
   theme_bw() +
-  geom_ribbon(aes(ymin = dffitted.a[ , 3], ymax = dffitted.a[ , 4]),
+  geom_ribbon(aes(ymin = `Q2.5`, ymax = `Q97.5`),
               fill = "firebrick", alpha = 1/5) +
-  geom_ribbon(aes(ymin = dffitted.a[ , 5], ymax = dffitted.a[ , 6]),
+  geom_ribbon(aes(ymin = Q25, ymax = Q75),
               fill = "firebrick4", alpha = 1/5) +
   geom_line(color = "firebrick4", size = 1/2) +
   geom_point(data = dcc, 
@@ -595,10 +595,10 @@ dffitted.b <-
 ggplot(data = dffitted.b, 
        aes(x = log.mass, y = Estimate)) +
   theme_bw() +
-  geom_ribbon(aes(ymin = dffitted.b[ , 3], ymax = dffitted.b[ , 4]),
+  geom_ribbon(aes(ymin = `Q2.5`, ymax = `Q97.5`),
               fill = "firebrick", alpha = 1/5) +
-  geom_ribbon(aes(ymin = dffitted.b[ , 5], ymax = dffitted.b[ , 6]),
-              fill = "firebrick", alpha = 1/5) +
+  geom_ribbon(aes(ymin = Q25, ymax = Q75),
+              fill = "firebrick4", alpha = 1/5) +
   geom_line(color = "firebrick4", size = 1/2) +
   geom_point(data = dcc, aes(x = log.mass, y = kcal.per.g),
              size = 2, color = "firebrick4") +
@@ -640,10 +640,10 @@ dffitted.c <-
 ggplot(data = dffitted.c, 
        aes(x = neocortex.perc, y = Estimate)) +
   theme_bw() +
-  geom_ribbon(aes(ymin = dffitted.c[ , 3], ymax = dffitted.c[ , 4]),
+  geom_ribbon(aes(ymin = `Q2.5`, ymax = `Q97.5`),
               fill = "firebrick", alpha = 1/5) +
-  geom_ribbon(aes(ymin = dffitted.c[ , 5], ymax = dffitted.c[ , 6]),
-              fill = "firebrick", alpha = 1/5) +
+  geom_ribbon(aes(ymin = Q25, ymax = Q75),
+              fill = "firebrick4", alpha = 1/5) +
   geom_line(color = "firebrick4", size = 1/2) +
   geom_point(data = dcc, aes(x = neocortex.perc, y = kcal.per.g),
              size = 2, color = "firebrick4") +
@@ -671,10 +671,10 @@ dffitted.d <-
 ggplot(data = dffitted.d, 
        aes(x = log.mass, y = Estimate)) +
   theme_bw() +
-  geom_ribbon(aes(ymin = dffitted.d[ , 3], ymax = dffitted.d[ , 4]),
+  geom_ribbon(aes(ymin = `Q2.5`, ymax = `Q97.5`),
               fill = "firebrick", alpha = 1/5) +
-  geom_ribbon(aes(ymin = dffitted.d[ , 5], ymax = dffitted.d[ , 6]),
-              fill = "firebrick", alpha = 1/5) +
+  geom_ribbon(aes(ymin = Q25, ymax = Q75),
+              fill = "firebrick4", alpha = 1/5) +
   geom_line(color = "firebrick4", size = 1/2) +
   geom_point(data = dcc, aes(x = log.mass, y = kcal.per.g),
              size = 2, color = "firebrick4") +
@@ -828,11 +828,7 @@ post <- posterior_samples(b5.9)
 library(rethinking)
 data(milk)
 d <- milk
-```
 
-Unload rethinking and load brms.
-
-```{r, message = F}
 rm(milk)
 detach(package:rethinking, unload = TRUE)
 library(brms)
@@ -920,18 +916,20 @@ Once again, we'll simulate our data.
 N <- 100
 
 set.seed(17)
+
 d <- 
-  tibble(h0        = rnorm(N, 10, 2), 
-         treatment = rep(0:1, each = N/2),
-         fungus    = rbinom(N, size = 1, prob = .5 - treatment*0.4),
-         h1        = h0 + rnorm(N, mean = 5 - 3*fungus))
+  tibble(
+    h0        = rnorm(N, 10, 2), 
+    treatment = rep(0:1, each = N/2),
+    fungus    = rbinom(N, size = 1, prob = .5 - treatment*0.4),
+    h1        = h0 + rnorm(N, mean = 5 - 3*fungus)
+  )
 ```
 
 We'll use `head()` to peek at the data, which we put in a [tibble rather than a data frame](https://github.com/tidyverse/tibble).
 
 ```{r}
-d %>%
-  head()
+d %>% head()
 ```
 
 These data + the model were rough on Stan, at first, which spat out warnings about divergent transitions. The model ran fine after setting `warmup = 1000` and `adapt_delta = .99`.

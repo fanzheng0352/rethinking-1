@@ -1,0 +1,164 @@
+---
+title: "CH 04 Practice Problems"
+author: "JP"
+date: "2/7/2019"
+output: html_document
+---
+
+```{r warning=FALSE, message=FALSE}
+library(rethinking)
+library(tidyverse)
+```
+
+# Medium
+
+## 4M1
+Simulate observed heights from the prior
+```{r tidyverse}
+set.seed(57)
+
+ds_temp <- 
+  tibble(
+  sample_mu = rnorm(n = 10e3, mean = 0, sd = 10),
+  sample_sigma = runif(10e3, min = 0, max = 10)
+) %>% 
+mutate(prior_h = rnorm( 10e3, mean = sample_mu, sd = sample_sigma))
+       
+dens(ds_temp$prior_h)
+```
+
+```{r base R}
+sample_mu <- rnorm(n = 10e3, mean = 0, sd = 10)
+sample_sigma <- runif(10e3, min = 0, max = 10)
+prior_h <- rnorm( 10e3, mean = sample_mu, sd = sample_sigma)
+dens(prior_h)
+```
+
+Translate the model into a map format
+```{r}
+data(Howell1) 
+d <- Howell1 
+d2 <- d[ d$age >= 18,]
+
+flist <- 
+  alist(
+    height ~ dnorm(mu, sigma),
+    mu ~ dnorm(0, 10),
+    sigma ~ dunif(0, 10)
+  )
+
+m4 <- rethinking::map(flist, data = d2)
+```
+
+# Hard
+## 4H1
+```{r}
+m4.h <- 
+  rethinking::map(
+    alist(
+      height ~ dnorm(mu, sigma),
+      mu <- a + b * weight,
+      a ~ dnorm(mean = 178, sd = 100),
+      b ~ dnorm(mean = 0, sd = 10),
+      sigma ~ dunif(min = 0, max = 50)
+    ), 
+    data = d2
+  )
+
+coef(m4.h)
+
+weights <- c(46.95, 43.72, 64.78, 32.59, 54.63)
+
+(pred_heights <- coef(m4.h)["a"] + coef(m4.h)["b"]*weights)
+```
+
+Calculate the 89% intervals
+```{r}
+post <- extract.samples(m4.h)
+
+HPDI_list <- vector(mode = "list", length = 5)
+
+for (i in seq_along(weights)){
+  mu_i <- post$a + post$b * weights[[i]]
+  
+  HPDI_list[[i]] <- HPDI(mu_i, prob = 0.89)
+}
+
+names(HPDI_list) <- weights
+
+tibble(
+  individual = 1:5,
+  weight = weights,
+  height_expected = pred_heights,
+  intervals = as.list(HPDI_list)
+) %>% 
+  unnest(intervals) %>% 
+  mutate(interval = rep(c("perc_5", "perc_94"), 5)) %>% 
+  spread(value = intervals, key = interval)
+```
+
+# 4H2
+```{r}
+d_18 <-
+  d %>%
+  filter(age < 18) %>% 
+  mutate(weight_mc = scale(weight, scale = FALSE) %>% as.numeric)
+
+d_18
+```
+
+Fit a linear regression to these data
+```{r}
+m_18 <- 
+  rethinking::map(
+  alist(
+    height ~ dnorm(mu, sigma),
+    mu <- a + b * weight_mc,
+    a ~ dnorm(mean = 0, sd = 40),
+    b ~ dnorm(mean = .5, sd = 5),
+    sigma ~ dunif(0, 40)
+  ),
+  data = d_18
+)
+
+precis(m_18)
+
+TEN_UNIT_FX <- coef(m_18)["b"] * 10
+TEN_UNIT_FX <- round(TEN_UNIT_FX, 2)
+```
+
+What does a 10 unit increase in weight predict? 
+A 10 kg increase in weight predicts a `r TEN_UNIT_FX` cm increase in height.
+
+```{r}
+d_18 %>% 
+  ggplot(aes(x = weight_mc, y = height)) + 
+  geom_point() + 
+  # superimpose MAP regression line
+  geom_abline(intercept = coef(m_18)["a"], slope = coef(m_18)["b"], color = "red", size = 1)
+```
+
+```{r}
+library(brms)
+b4.3 <- 
+  brm(data = d_18, family = gaussian,
+      height ~ 1 + weight_mc,
+      prior = c(set_prior("normal(0, 40)", class = "Intercept"),
+                set_prior("normal(.5, 5)", class = "b"),
+                set_prior("uniform(0, 40)", class = "sigma")),
+      chains = 4, iter = 41000, warmup = 40000, cores = 4)
+
+plot(b4.3)
+print(b4.3)
+```
+
+```{r}
+# generate x-axis values
+weight.seq <- tibble(weight_mc = seq(from = -15, to = 30, by = 1))
+```
+
+
+```{r}
+weight.seq <- tibble(weight = seq(from = 25, to = 70, by = 1))
+```
+

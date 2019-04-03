@@ -1,0 +1,7 @@
+---
+title: "Bayes Theorum"
+date: "2019-02-04"
+output: html_document
+---
+
+Excellent overview of Bayes Theorum on [Khan Academy](https://www.khanacademy.org/partner-content/wi-phi/wiphi-critical-thinking/wiphi-fundamentals/v/bayes-theorem)

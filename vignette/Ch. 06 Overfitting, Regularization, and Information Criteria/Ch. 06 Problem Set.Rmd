@@ -1,0 +1,62 @@
+---
+title: "Ch 6 Problem Set"
+author: "JP"
+date: "3/4/2019"
+output: html_document
+---
+
+# Easy
+## 6E1. Information entropy is defined by three criteria
+1. The measure of uncertainty should be continuous, not categorical. 
+2. The measure of uncertainty should increase as the number of possible events increases. 
+3. The measure of uncertainty should be additive, which is to say that the sum of combined uncertainties should equal the sum of independent uncertainties.  
+
+```{r}
+.3 * log(.3)
+
+e <- exp(1)
+
+e^(-1.203973) # = .3
+
+# log(.3) = -1.203973
+
+log(9)
+log(9, base = 3)
+```
+
+2019-03-12
+
+## 6E2. Calculate the entropy of a loaded coin
+```{r}
+p <- c("heads"=.7, "tails"=.3)
+(ENTROPY <- -sum( p * log(p) ))
+```
+
+The entropy of the coin is approximately `r round(ENTROPY, 2)`.
+
+## 6E3. Suppose a four-sided die is loaded such that its faces show at ...
+```{r}
+p <- c("1"=.2, "2"=.25, "3"=.25, "4"=.3)
+(ENTROPY <- -sum( p * log(p) ))
+```
+
+The entropy of the die is approximately `r round(ENTROPY, 2)`.
+
+## 6E4. What is the entropy of a coin whose faces show at ...
+```{r}
+p <- c("1"=.33, "2"=.33, "3"=.33)
+(ENTROPY <- -sum( p * log(p) ))
+```
+
+The entropy of the die is approximately `r round(ENTROPY, 2)`.
+
+# Medium.
+## 6M1. Write down and compare the definitions of AIC, DIC, & WAIC. Which is most general? And which assumptions are required to transform a more general criterion into a less general one.
+
+The *Akaike Information Criterion (AIC)* approximates predictive accuracy. It approximates out-of-sample deviance (AKA test deviance) by summing `in-sample deviance` and (2 * `the number of parameters`). 
+
+The *Deviance Information Criterion (DIC)* is a Bayesian information criterion. It assumes a multivariate Gaussian posterior distribution, but accommodates informative priors. It is the average posterior distribution of deviance + the number of parameters. 
+
+The *Widely Applicable Information Criterion (WAIC)* estimates out-of-sample deviance (AKA test deviance) without assuming a multivariate Gaussian posterior distribution, because it is *pointwise*. It handles uncertainty at each particular observation. It is equal to -2 * (`log-pointwise-predictive-density` - `the effective number of parameters`)
+
+The WAIC is most general, because it does not assume a multivariate Gaussian posterior nor uninformative priors.

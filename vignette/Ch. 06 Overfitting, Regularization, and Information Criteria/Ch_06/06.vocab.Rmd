@@ -1,0 +1,9 @@
+---
+title: "Vocabulary for Chapter 6"
+author: "JP"
+date: "3/20/2019"
+output: html_document
+---
+
+`Training deviance` is also known as `in-sample deviance`.
+`Testing deviance` is also known as `out-of-sample deviance`

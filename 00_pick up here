@@ -1,0 +1,18 @@
+# Where you left off
+
+2019-04-02 I was trying to plot r-squared of weak and well fitting models in the hopes of better understanding r-squared. 
+
+2019-04-03 I understand R^2 much better after seeing the origins of the simple R^2 formula. R^2 describes explained variance (var - SSE) as a ratio of all variance in the outcome. 
+
+2019-04-03 __ pick up on understanding how *out-of-sample deviance* can provide a useful target for optimizing model performance. 
+
+
+
+
+
+
+
+
+
+# For after this course
+__ Perhaps a course to review modelr will refresh you on EDA for model fit as found in DataCamp. 

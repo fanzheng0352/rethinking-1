@@ -1,0 +1,23 @@
+---
+title: "temp"
+author: "JP"
+date: "3/22/2019"
+output: html_document
+---
+
+```{r pressure, echo=FALSE, fig.cap="*R^2^*", out.width = '100%', include=TRUE}
+knitr::include_graphics(here::here("data", "images", "r_squared_formula.png"))
+
+# file_r_squared_formula <- "/Users/joepowers/Documents/coding/rethinking/static/images/r_squared_formula.png"
+# 
+# knitr::include_graphics(file_r_squared_formula)
+
+# image from http://www.simages.org/r-squared-formula/
+```
+
+```{r global options, include=FALSE}
+knitr::opts_chunk$set(
+  fig.align='center', dpi = 300, 
+  include=FALSE, echo=FALSE, message=FALSE, warning=FALSE
+)
+```

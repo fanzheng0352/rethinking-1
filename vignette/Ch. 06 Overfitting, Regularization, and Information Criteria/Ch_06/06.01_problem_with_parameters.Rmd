@@ -1,0 +1,39 @@
+---
+title: "06.01 The problem with parameters"
+author: "JP"
+date: "4/3/2019"
+output: html_document
+---
+
+## Overview: 
+
+Adding parameters will always improve a model's fit as measured by *R^2^*.
+
+```{r global options, include=FALSE}
+knitr::opts_chunk$set(
+  fig.align='center', 
+  #dpi = 150, 
+  include=FALSE, echo=FALSE, message=FALSE, warning=FALSE
+)
+```
+
+```{r packages and parameters}
+library(magrittr)
+library(modelr)
+library(tidyverse)
+```
+
+```{r r2, echo=FALSE, out.width="400px", include=TRUE}
+knitr::include_graphics(here::here("static/images/r2_explained.png"))
+# image from kindle p167
+```
+
+```{r r2v2, echo=FALSE, out.width="200px", include=TRUE}
+knitr::include_graphics(here::here("static/images/r_squared_formula.png"))
+# image from http://www.simages.org/r-squared-formula/
+```
+
+The underfitting-overfitting problem is often described as the bias-variance trade-off. 
+
+## Takeawys
+Adding parameters will always improve a model's fit as measured by *R^2^*, but it will produce overfit models that predict poorly. Underfit models will be insensitive to their data. These pressures need to be balanced to build the most informative models. 

@@ -1,0 +1,19 @@
+---
+title: "Ch 6"
+author: "JP"
+date: "3/22/2019"
+output: html_document
+---
+# Intro 
+
+## Ockham's Razor and Ulysses's Compass
+
+The chapter opens with a metaphor of solar system models and Ockham's Razor: models with fewer assumptions are preferred. But the razor offers no guidance about how to choose between models that vary in both accuracy and simplicity. This chapter will address tools for dealing with this tradeoff between over- and underfitting. 
+
+There are two common families of approaches for navigating between over- and underfitting: 
+  1) A `Regularizing Prior` to prevent the model from being too heavily influenced by the data (AKA penalized likelihood).    
+  2) Using `Information Criteria` model (~mock-up) the prediction task and comparing its predictive accuracy to test data.
+  
+# FUPs
+__ You should have a clear sense of both these terms by chapters end
+    `Regularizing Prior` & `Information Criteria`

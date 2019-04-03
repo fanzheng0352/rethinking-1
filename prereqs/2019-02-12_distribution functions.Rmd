@@ -1,0 +1,28 @@
+---
+title: "distribution functions"
+author: "JP"
+date: "2/12/2019"
+output: html_document
+---
+
+normal probability density function
+```{r}
+(1 / sqrt(2*pi*3^2)) * exp(((-(75-69)^2)/(2*3^2)))
+```
+
+Figuring out `rnorm()`
+```{r}
+rnorm(7, mean = c(10, 100, 1000), sd = c(0, 1, 10))
+
+tibble(
+  n = 2,
+  mean = c(10, 100, 1000), 
+  sd = c(0, 0, 0)
+) %>% 
+  mutate(sample = list(rnorm(n, mean, sd))) %>% 
+  unnest()
+
+# this is for another time. But how does rnorm wiork within a dataframe? 
+```
+
+`rnorm()` will use the vector pairs sequentially and then restart from 1. 
