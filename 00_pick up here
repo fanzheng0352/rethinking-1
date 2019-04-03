@@ -4,7 +4,7 @@
 
 2019-04-03 I understand R^2 much better after seeing the origins of the simple R^2 formula. R^2 describes explained variance (var - SSE) as a ratio of all variance in the outcome. 
 
-2019-04-03 __ pick up on understanding how *out-of-sample deviance* can provide a useful target for optimizing model performance. 
+2019-04-03 __ pick up on understanding how *out-of-sample deviance* can provide a useful target for optimizing model performance. You are at 6.2.2 having just covered how models reflect our ignorance.
 
 
 
@@ -16,3 +16,5 @@
 
 # For after this course
 __ Perhaps a course to review modelr will refresh you on EDA for model fit as found in DataCamp. 
+
+__ a review of probability might help a great deal. I would love to fall back on fluency in that as I read Stats books. Perhaps via Khan or [Datacamp](https://www.datacamp.com/courses/foundations-of-probability-in-r). I am having to take author's word for now on probability. 
