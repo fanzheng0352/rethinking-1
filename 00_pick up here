@@ -6,7 +6,11 @@
 
 2019-04-03 __ pick up on understanding how *out-of-sample deviance* can provide a useful target for optimizing model performance. You are at 6.2.2 having just covered how models reflect our ignorance.
 
-2019-04-04 I would do well to create a brief overview of the justification for useing deviance. It was a lengthy argument. There was plenty of math formulas that I did not much more than loosely grasp. It's hard to know when to stop and learn the math or keep going with the book. 
+2019-04-04 __ pick up on 6.3 to see how regularizing priors and information criteria address concerns about overfitting in out-of-sample deviance that were raised at the end of 6.2.
+
+
+At end of Ch 6. 
+__ I would do well to create a brief overview of the justification for using deviance. It was a lengthy argument. There was plenty of math formulas that I did not much more than loosely grasp. It's hard to know when to stop and learn the math or keep going with the book. 
 
 
 
