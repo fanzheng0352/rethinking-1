@@ -1,0 +1,22 @@
+---
+title: "6.3 Regularization"
+author: "JP"
+date: "4/4/2019"
+output: html_document
+---
+
+## Overview: 
+ 
+
+```{r global options, include=FALSE}
+knitr::opts_chunk$set(
+  fig.align='center', dpi = 300, 
+  include=FALSE, echo=FALSE, message=FALSE, warning=FALSE
+)
+```
+
+```{r packages and parameters}
+library(magrittr)
+library(modelr)
+library(tidyverse)
+```

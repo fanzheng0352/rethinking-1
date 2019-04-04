@@ -6,8 +6,7 @@
 
 2019-04-03 __ pick up on understanding how *out-of-sample deviance* can provide a useful target for optimizing model performance. You are at 6.2.2 having just covered how models reflect our ignorance.
 
-
-
+2019-04-04 I would do well to create a brief overview of the justification for useing deviance. It was a lengthy argument. There was plenty of math formulas that I did not much more than loosely grasp. It's hard to know when to stop and learn the math or keep going with the book. 
 
 
 
@@ -18,3 +17,5 @@
 __ Perhaps a course to review modelr will refresh you on EDA for model fit as found in DataCamp. 
 
 __ a review of probability might help a great deal. I would love to fall back on fluency in that as I read Stats books. Perhaps via Khan or [Datacamp](https://www.datacamp.com/courses/foundations-of-probability-in-r). I am having to take author's word for now on probability. 
+
+__ a review of linear formulas on Khan and Datacamp would be very valuable for recognizing future formulas in your stats study. 

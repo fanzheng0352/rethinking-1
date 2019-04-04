@@ -95,10 +95,45 @@ INFO_ENTRO_rain_01 <- -sum(p*log(p)) %>% round(2)
 The information entropy for this sunny area is about `r INFO_ENTRO_rain_01`.
 
 ### 6.2.3 From entropy to accuracy
-Information entropy quantifies uncertainty. Uncertainty about weather is very low in Dubai and very high in Ireland. 
+If we think about the certainty of weather in Ireland vs Dubai, we can say that  uncertainty lower in Dubai than in Ireland. Information entropy quantifies uncertainty in units of entropy. 
 
-We can use information entropy to say how far a model is from its target. 
+This is useful in model comparison because we can use information entropy to say how far a model is from its target. 
+
+The target distribution has its own entropy value, and another entropy, cross entropy, arises from using the model to predict the target. The difference between these two entropies, is divergence.
 
 **Divergence** is the additional uncertainty induced by using probabilities from one distribution to describe another distribution. 
 
+```{r divergence, echo=FALSE, out.width="200px", include=TRUE}
+knitr::include_graphics(here::here("static/images/divergence.png"))
+```
+
 Divergence is equal to the average difference in log probability between the target (p) and the model (q). As q grows more dfferent from p the divergence also grows. 
+
+### 6.2.4 From divergence to deviance
+Deviance is a measure of model fit. Deviance approximates the average log-probability of a model. 
+
+The absolute magnitude of each model's *mean log-probability* is not informative, but the difference in *mean log-probability* between two models is informative. 
+
+The deviance formula below approximates the relative value of E log(*q~i~*), the average log-probability of the candidate model *q*.
+
+```{r deviance, echo=FALSE, out.width="200px", include=TRUE}
+knitr::include_graphics(here::here("static/images/deviance.png"))
+```
+
+*i* indexes each observation (case), and each *q~i~* is just the likelihood of case *i*. The −2 is there for historical reasons. 
+
+I can't believe it. This refers to the log-likelihood of the data! Is log-likelihood stating the log-likelihood of the data under each model? 
+```{r}
+# fit model with lm 
+m_ex <- lm(mpg ~ wt, mtcars) 
+
+# compute deviance by cheating 
+(-2) * logLik(m_ex)
+```
+
+### 6.2.5 From deviance to out-of-sample
+Note: "in-sample" and "out-of-sample" just refer to "training" and "test" data/statistics.
+
+Deviance in the training data will decline with each additional parameter added to the model, while deviance in the testing data will decrease then start to increase as models become overfit from too many parameters. 
+
+This fact forms the basis for unnderstanding regularizing priors and information criteria in the next sections.
