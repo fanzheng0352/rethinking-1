@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ## Overview: 
- 
+Beginning with flat priors tells the machine that all parameters are equally plausible. When we do not believe this to be the case we can use a regularizing prior (really just a conservative prior that dims how much the model can learn from the training sample, e.g., **a narrow prior for ${\beta}$ is meant to regularize** such as ${\beta}$ ~ Normal(0,1) when *x* is standardized). 
 
 ```{r global options, include=FALSE}
 knitr::opts_chunk$set(
@@ -20,3 +20,6 @@ library(magrittr)
 library(modelr)
 library(tidyverse)
 ```
+
+
+
