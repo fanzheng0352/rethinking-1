@@ -1,0 +1,38 @@
+---
+title: "6.3 Regularization"
+author: "JP"
+date: "4/4/2019"
+output: html_document
+---
+
+```{r}
+source(here::here("file_paths.R"))
+
+library(knitr)
+library(magrittr)
+library(modelr)
+library(tidyverse)
+
+file_reg_dev <- paste(dir_images, "regularization_and_deviance_n20.png", sep = "/")
+```
+
+## Overview: 
+Beginning with flat priors tells the machine that all parameters are equally plausible. When we do not believe this to be the case we can use a regularizing prior (really just a conservative prior that dims how much the model can learn from the training sample, e.g., **a narrow prior for ${\beta}$ is meant to regularize** such as ${\beta}$ ~ Normal(0,1) when *x* is standardized. Even more conservative priors could be N(0,.5) and N(0,.25) ). 
+
+```{r global options, include=FALSE}
+opts_chunk$set(
+  fig.align='center', dpi = 300, 
+  include=FALSE, echo=FALSE, message=FALSE, warning=FALSE
+)
+```
+
+Deviance 
+```{r out.width=200}
+include_graphics(file_reg_dev)
+```
+
+*Caption*: Hollow blue circles represent mean deviance for test data and solid blue circles for training data.
+
+Note that the blue training deviance gets worse (increases) with more conservative priors, but the black test deviance improves (decreases) with more conservative priors. In particular, the harm done by overly complex models is more and more minimized by the most conservative priors. 
+
+__ I am feeling pretty lost in this. I can't really remember what is deviance and certainly can't understand what mean deviance represents in the context of the above plot: deviance from a model with flat priors? 
