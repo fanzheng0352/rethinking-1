@@ -6,13 +6,13 @@ output: html_document
 ---
 
 ## Overview: 
-To balance between over and underfitting you must first choose a *criterion of model performance*. You must choose a *target* that you want the model to perform well at. Information theory provides a common and useful target, the *out-of-sample deviance*.
+You need a target *criterion of model performance* in order to strike a balance between over- and underfitting. Information theory provides a common and useful target, the *out-of-sample deviance*.
 
 The path to understanding the relevance of out-of-sample deviance is not direct. Here are the steps ahead.  
-    1. establish that joint probability, not average probability, is the right way to judge model accuracy.  
-    2. use information theory to establish a measurement scale for distance from perfect accuracy.  
-    3. establish deviance as an approximation of relative distance from perfect accuracy.  
-    4. establish that it is only deviance out-of-sample that is of interest.  
+    1. understand that *joint probability*, not average probability, is the right way to judge *model accuracy*.  
+    2. use *information theory* to establish a measurement scale for distance from perfect accuracy.  
+    3. establish *deviance* as an approximation of relative distance from perfect accuracy.  
+    4. establish that it is only *deviance out-of-sample* that is of interest.  
 
 ```{r global options, include=FALSE}
 knitr::opts_chunk$set(
@@ -35,22 +35,23 @@ There are 2 major dimensions to consider when defining a target for model optimi
 Using *rate of correct prediction* as your target can be problematic when it rewards expensive failures. 
 
 ### 6.2.1.1 Costs & Benenfits
-By assigning rewards and penalties to direction of right and wrong predictions you can optimize for better types of accuracy than rate of correct prediction. 
+By assigning rewards and penalties to the direction of right and wrong predictions you can optimize for better types of accuracy than rate of correct prediction alone. 
 
 ### 6.2.1.2 Measuring Accuracy
 Maximizing joint probability, the probability of a predicition being right given the number of possible scenarios, is different than maximizing the average probability.
 
-How should we describe the distance between a prediction and the observed event/target? The measure of distance should account for the ease of hitting the target. For instance it is easier to hit a target of 2D target (distance and width), than it is to hit a 3D target of distance & width at the right time. 
+How should we describe the distance between a prediction and the observed event/target? *The measure of distance should account for the ease of hitting the target.* For instance it is easier to hit a 2D target (distance and width), than it is to hit a 3D target of distance & width at the right time. 
 
 As more dimensions are added to the target, the potential to miss and the potential to impress have both grown. 
 
 Keep in mind that the best model is not true. The best model provides the right probabilities given our state of ignorance. Probability is in the model not in the world. With complete information we could predict with certainty, but ignorant of many worldly factors we predict from a state of ignorance. A globe toss only seems random. We know that the globe is 70% water and so we use that to inform our model, but we are ignorant of starting point and torque and air resistance so we do not include those factors in the model. The model describes our state of ignorance.
 
 ### 6.2.2 Information and uncertainty
-Information theory can help us to Measure the distance of a model's accuracy from a target. Information theory frames the question as, "How much is our uncertainty reduced by learning an outcome?" For instance when a predicted event occurs, it is no longer uncertain. The reduction in uncertainty from predicted to occurred is the information gain / the reduction in uncertainty. 
+Information theory can help us to measure the distance of a model's accuracy from a target. Information theory frames the question as, "How much is our uncertainty reduced by learning an outcome?" For instance when a predicted event occurs, it is no longer uncertain. The reduction in uncertainty from predicted to occurred is the information gain / the reduction in uncertainty. 
+
 In this case, **information** is defined as the reduction in uncertainty from learning an outcome. 
 
-We function that will input the probabilities of rain and shine and output a measure of uncertainty about the weather on a future day.
+We need a function that will input the probabilities of rain and shine and output a measure of uncertainty about the weather on a future day.
 
 A measure of uncertainty should meet 3 criteria
     1. The measure of uncertainty should be continuous
@@ -58,15 +59,17 @@ A measure of uncertainty should meet 3 criteria
     3. The measure of uncertainty should be additive
     
 The only function that satisfies these three criteria is **Information Entropy**. 
-    `n` is the number of different possible events,
-    each event `i` has probability `p~i~`, 
-    `p` is the list of probabilities, and  
+    **n** is the number of different possible events,
+    each event **i** has probability **p~i~**, 
+    **p** is the list of probabilities, and  
     the unique measure of uncertainty we seek is:
 ```{r Information Entropy, echo=FALSE, out.width="400px", include=TRUE}
 knitr::include_graphics(here::here("static/images/info_entropy.png"))
 ```
 
 In plainer words: *The uncertainty contained in a probability distribution is the average log-probability of an event*.
+
+__ But what does this mean? What is the "log-probability of an event" and why are we using it? 
 
 So *H(p)* is our measure of uncertainty. 
 
@@ -95,11 +98,11 @@ INFO_ENTRO_rain_01 <- -sum(p*log(p)) %>% round(2)
 The information entropy for this sunny area is about `r INFO_ENTRO_rain_01`.
 
 ### 6.2.3 From entropy to accuracy
-If we think about the certainty of weather in Ireland vs Dubai, we can say that  uncertainty lower in Dubai than in Ireland. Information entropy quantifies uncertainty in units of entropy. 
+If we think about the certainty of weather in Ireland vs Dubai, we can say that uncertainty is lower in Dubai than in Ireland. Information entropy quantifies uncertainty in **units of entropy**. 
 
 This is useful in model comparison because we can use information entropy to say how far a model is from its target. 
 
-The target distribution has its own entropy value, and another entropy, cross entropy, arises from using the model to predict the target. The difference between these two entropies, is divergence.
+The target distribution has its own entropy value, and another entropy, cross entropy, arises from using the model to predict the target. *The difference between these two entropies, is divergence.*
 
 **Divergence** is the additional uncertainty induced by using probabilities from one distribution to describe another distribution. 
 
