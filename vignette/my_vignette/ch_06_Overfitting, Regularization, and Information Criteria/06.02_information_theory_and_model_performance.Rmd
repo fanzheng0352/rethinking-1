@@ -58,11 +58,13 @@ A measure of uncertainty should meet 3 criteria
     2. The measure of uncertainty should increase as the number of possible events increases
     3. The measure of uncertainty should be additive
     
-The only function that satisfies these three criteria is **Information Entropy**. 
-    **n** is the number of different possible events,
-    each event **i** has probability **p~i~**, 
-    **p** is the list of probabilities, and  
-    the unique measure of uncertainty we seek is:
+The only function that satisfies these three criteria is **Information Entropy**.    
+
+  **n** is the number of different possible events,  
+  each event **i** has probability **p~i~**,   
+  **p** is the list of probabilities, and    
+  the unique measure of uncertainty we seek is:
+    
 ```{r Information Entropy, echo=FALSE, out.width="400px", include=TRUE}
 knitr::include_graphics(here::here("static/images/info_entropy.png"))
 ```
