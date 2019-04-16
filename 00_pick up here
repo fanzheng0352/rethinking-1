@@ -8,14 +8,8 @@
 
 2019-04-04 __ pick up on 6.3 to see how regularizing priors and information criteria address concerns about overfitting in out-of-sample deviance that were raised at the end of 6.2.
 
-
-At end of Ch 6. 
-__ I would do well to create a brief overview of the justification for using deviance. It was a lengthy argument. There was plenty of math formulas that I did not much more than loosely grasp. It's hard to know when to stop and learn the math or keep going with the book. 
-__ I returned to look at 6.3 and recognized almost nothing. I think that my notes on each chapter will be valuable for creating touch points to refresh on. 
-
-__ leaving off I am trying to understand how the entropy in each distribution (modeled and actual?) results in a dviergence value. 
-
-
+2019-04-16 I am trying to create a brief overview of the justification for using deviance. I have had to do a lot of weeding, diving into density functions but I am getting there, and the weeding has been well worth the time. 
+__ I am trying to understand how MAP provides a likelihood function that is used to calculate deviance. 
 
 
 # For after this course
