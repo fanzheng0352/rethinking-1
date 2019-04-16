@@ -182,10 +182,35 @@ d <- data.frame(species=sppnames, brain=brainvolcc, mass=masskg)
 m6.1 <- lm(brain ~ mass, d)
 -2 * logLik(m6.1)
 
-d
+# standardize the mass before fitting
+d$mass.s <- (d$mass-mean(d$mass))/sd(d$mass)
 
+m6.8 <-
+  map(
+    alist(
+        brain ~ dnorm( mu , sigma ),
+        mu <- a + b*mass.s
+    ),
+    data = d,
+    start = list( a=mean(d$brain), b=0, sigma=sd(d$brain) ),
+    method = "Nelder-Mead" 
+  )
 
-(DEVIANCE_MODEL <- (-2) * sum(log(q))) %>% round(2)
+# extract MAP estimates
+theta <- coef(m6.8)
+
+# compute deviance
+dev <- 
+  (-2) * 
+  sum( 
+    dnorm(
+      d$brain,
+      mean = theta["a"]+theta["b"]*d$mass.s,
+      sd = theta["sigma"],
+      log = TRUE
+    ) 
+  )
+dev
 ```
 
 In this case our model's predicted distribution of `r q` has a divergence of `r DEVIANCE_MODEL`.
@@ -199,6 +224,7 @@ ds_titanic <-
   ds_titanic %>% 
   mutate(
     Survived = fct_recode(Survived, "0" = "No", "1" = "Yes"),
+    Survived = as.character(Survived),
     Survived = as.integer(Survived)
   ) %>% 
   uncount(Freq)
@@ -213,6 +239,36 @@ ds_titanic_100 %>%
   count(Survived) %>% 
   mutate(prop = Survived / sum(Survived))
 
-ds_titanic_100 %>% 
-  glm()
+m1 <- 
+  ds_titanic_100 %>% 
+  glm(Survived ~ Sex, family = "binomial", data = .)
+
+summary(m1)
+
+m2 <- 
+  ds_titanic_100 %>% 
+  glm(Survived ~ Sex, family = "binomial", data = .)
+
+summary(m2)
 ```
+
+```{r}
+library(rethinking) 
+data(milk) 
+d <- milk
+
+m5.10 <- 
+  map( 
+    alist( 
+      kcal.per.g ~ dnorm(mu, sigma), 
+      mu <- a + bf*perc.fat, 
+      a ~ dnorm(0.6, 10), 
+      bf ~ dnorm(0, 1), 
+      sigma ~ dunif(0, 10) 
+    ), 
+  data = d)
+
+precis(m5.10)
+str(m5.10)
+```
+
