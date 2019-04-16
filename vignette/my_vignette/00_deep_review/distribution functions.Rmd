@@ -5,16 +5,18 @@ output: html_document
 
 `runif(n, min, max)`
 
-`dunif(x, min, max)` calculates the probability of a variable taking on value within a specified range defined by ... . Note this function only seems to be used within graphs or within other functions. It will not return a useful value on its own. 
+`dunif(x, min, max)` will output the y-axis height at x of the uniform distribution between `min` and `max`. 
 
 ```{r}
-x <- seq(from = -10, to = 60, by = 1)
 dunif(x = c(.25, .5), min = 0, max = 1)
 ```
 
-What does this demonstrate
+But note that this y-axis output from the `uniform density function` is not the probability that the random variable will equal x, it is just the height at the y-axis when the random variable equals x. Further computation is necessary to determine probabilities of x taking on specified values, and those values must be specified as a range when x is continuous. 
+
+Note that the y-axis height associated with any x value is equal to 1 / (the range of the uniform distribution).
 ```{r}
-dunif(x = 10, min = 0, max = 120) # which is 121 in length
+dunif(x = 10, min = 0, max = 120)
+dunif(x = 10.5, min = 0, max = 120)
 1/120
 ```
 
@@ -51,8 +53,8 @@ curve(
 
 # Normal Distributions
 ```{r}
-tibble(x = seq(from = 100, to = 250, by = .1)) %>% 
-  ggplot(aes(x = x, y = dnorm(x, mean = 178, sd = 20))) +
+tibble(x = seq(from = 0, to = 100, by = .1)) %>% 
+  ggplot(aes(x = x, y = dnorm(x, mean = 50, sd = 15))) +
   geom_line() +
   ylab("density")
 ```
@@ -60,10 +62,15 @@ tibble(x = seq(from = 100, to = 250, by = .1)) %>%
 Here `dnorm()` takes the 150^10 data points in `x` and distributes probability across all those points such that plotting y on x produces a normal distribution. 
 
 ```{r}
-dnorm(x, 178, 20) %>% length()
+dnorm(x, 50, 15) %>% length()
 ```
 
-
+```{r}
+tibble(x = seq(from = 0, to = 100, by = 1)) %>% 
+  ggplot(aes(x = x, y = dnorm(x, mean = 50, sd = 15))) +
+  geom_line() +
+  ylab("density")
+```
 
 
 
