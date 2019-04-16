@@ -191,12 +191,15 @@ d
 In this case our model's predicted distribution of `r q` has a divergence of `r DEVIANCE_MODEL`.
 
 ```{r}
+set.seed(57)
+
 (ds_titanic <- as.data.frame(Titanic))
 
 ds_titanic <- 
   ds_titanic %>% 
   mutate(
-    Survived = fct_recode(Survived, "0" = "No", "1" = "Yes")
+    Survived = fct_recode(Survived, "0" = "No", "1" = "Yes"),
+    Survived = as.integer(Survived)
   ) %>% 
   uncount(Freq)
   
@@ -209,4 +212,7 @@ ds_titanic_100 <-
 ds_titanic_100 %>% 
   count(Survived) %>% 
   mutate(prop = Survived / sum(Survived))
+
+ds_titanic_100 %>% 
+  glm()
 ```
