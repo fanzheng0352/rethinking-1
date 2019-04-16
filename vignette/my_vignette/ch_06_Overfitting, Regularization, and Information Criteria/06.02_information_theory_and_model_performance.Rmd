@@ -210,10 +210,3 @@ ds_titanic_100 %>%
   count(Survived) %>% 
   mutate(prop = Survived / sum(Survived))
 ```
-
-```{r}
-
-```
-
-
-*DEVIANCE should have been based on all observations rather than the 2 values of the model q, the values of q would accompany each observed outcome*
