@@ -21,10 +21,17 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r packages and parameters}
+```{r packages and parameters, message=FALSE, warning=FALST}
+library(knitr)
 library(magrittr)
 library(modelr)
 library(tidyverse)
+
+source(here::here("file_paths.R"))
+
+file_info_entropy <- paste_image_path("info_entropy.png")
+file_divergence <- paste_image_path("divergence.png")
+file_deviance <- paste_image_path("deviance.png")
 ```
 
 ## 6.2.1 "Establish that joint probability, not average probability, is the right way to judge model accuracy."
@@ -66,7 +73,7 @@ The only function that satisfies these three criteria is **Information Entropy**
   the unique measure of uncertainty we seek is:
     
 ```{r Information Entropy, echo=FALSE, out.width="400px", include=TRUE}
-knitr::include_graphics(here::here("static/images/info_entropy.png"))
+include_graphics(file_info_entropy)
 ```
 
 In plainer words: *The uncertainty contained in a probability distribution is the average log-probability of an event*.
@@ -109,7 +116,7 @@ The target distribution has its own entropy value, and another entropy, cross en
 **Divergence** is the additional uncertainty induced by using probabilities from one distribution to describe another distribution. 
 
 ```{r divergence, echo=FALSE, out.width="400px", include=TRUE}
-knitr::include_graphics(here::here("static/images/divergence.png"))
+include_graphics(file_divergence)
 ```
 
 Divergence is equal to the average difference in log probability between the target (p) and the model (q). As q grows more dfferent from p the divergence also grows. 
@@ -122,7 +129,7 @@ The absolute magnitude of each model's *mean log-probability* is not informative
 The deviance formula below approximates the relative value of E log(*q~i~*), the average log-probability of the candidate model *q*.
 
 ```{r deviance, echo=FALSE, out.width="400px", include=TRUE}
-knitr::include_graphics(here::here("static/images/deviance.png"))
+include_graphics(file_deviance)
 ```
 
 *i* indexes each observation (case), and each *q~i~* is just the likelihood of case *i*. The −2 is there for historical reasons. 
@@ -186,7 +193,7 @@ m6.1 <- lm(brain ~ mass, d)
 d$mass.s <- (d$mass-mean(d$mass))/sd(d$mass)
 
 m6.8 <-
-  map(
+  rethinking::map(
     alist(
         brain ~ dnorm( mu , sigma ),
         mu <- a + b*mass.s
@@ -197,7 +204,7 @@ m6.8 <-
   )
 
 # extract MAP estimates
-theta <- coef(m6.8)
+theta <- rethinking::coef(m6.8)
 
 # compute deviance
 dev <- 

@@ -15,17 +15,19 @@ knitr::opts_chunk$set(
 library(magrittr)
 library(modelr)
 library(tidyverse)
+
+file_r2 <- paste(dir_images, "r2_explained.png", sep = "/")
+file_r2v2 <- paste(dir_images, "r_squared_formula.png", sep = "/")
 ```
 
 ```{r r2, echo=FALSE, out.width="400px", include=TRUE}
-knitr::include_graphics(here::here("static/images/r2_explained.png"))
-# image from kindle p167
+knitr::include_graphics(file_r2)
 ```
 
 Note that the classic formula for R^2^ seen below is derived from the formula seen above. 
 
 ```{r r2v2, echo=FALSE, out.width="200px", include=TRUE}
-knitr::include_graphics(here::here("static/images/r_squared_formula.png"))
+knitr::include_graphics(file_r2v2)
 # image from http://www.simages.org/r-squared-formula/
 ```
 
