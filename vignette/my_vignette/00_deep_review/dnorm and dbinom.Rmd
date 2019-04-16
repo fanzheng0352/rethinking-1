@@ -1,0 +1,38 @@
+---
+title: "The Probability Density Function"
+author: "JP"
+date: "4/16/2019"
+output: html_document
+---
+
+```{r}
+library(knitr)
+library(tidyverse)
+```
+
+```{r}
+file_normal_pdf <- here::here("static/images/normal_pdf.png")
+```
+
+```{r deviance, echo=FALSE, out.width="400px", include=TRUE}
+knitr::include_graphics(file_normal_pdf)
+```
+
+The `probability density function (PDF)` outputs the height of the y-axis on the probability density curve at the provided x value. The PDF does NOT output the probability that a random variable will take on a particular value of x. To calculate the probability of x taking on a values can only be calculated as x falling within a range of values, because the probabillity of a continuous random variable taking on a specific value is 1/inf. 
+
+In contrast, the `binomial probability distribution` has a `probability mass function (PMF)` rather than a density function because it's outputs are discrete.  
+```{r}
+# outputs Pr(1 head in 1 flip)
+success_n <- 1 
+trials_n <- 1
+prob_success <- .5
+dbinom(success_n, trials_n, prob_success)
+
+# outputs probability of 5 heads in 10 flips
+success_n <- 5 
+trials_n <- 10
+prob_success <- .5
+dbinom(success_n, trials_n, prob_success)
+```
+
+
