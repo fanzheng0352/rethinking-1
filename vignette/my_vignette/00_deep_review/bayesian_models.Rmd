@@ -1,0 +1,40 @@
+---
+title: "Bayesian Models"
+author: "JP"
+date: "4/17/2019"
+output: html_document
+---
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+```
+
+# Probability Distributions
+What is a `probability distribution`? It is just a mathematical function that outputs the probabilities that different outcomes will result from an experiment. 
+
+Intuitively, if I have 10 events and a .3 probability of success on each event, then I can form a probability distribution for `Binomial(n, p)`.
+```{r}
+(binomial_10_.3 <- dbinom(0:10, 10, .3))
+
+tibble(
+  x = as.factor(0:10),
+  y = binomial_10_.3
+) %>% 
+  ggplot(aes(x = x, y = y)) + 
+  geom_col()
+```
+
+Intuitively I usally think of a distribution as being the relative frequency of the different outcomes. I often think of this as a histogram, but I can see now that such a histogram could be mathematically described by function like `dbinom()` when the function inputs the vector of all possible discrete outcomes. 
+
+The probability of events in a `discrete probability distribution` can be described by a `probability mass function`.
+
+The *binomial probability distribution* is the discrete probability distribution of the `number of successes` in n independent trials, each with a binary outcome. 
+```{r}
+dbinom(
+  x = 0:10,  # vector of all possible counts of successful trials
+  size = 10, # number of trials (n)
+  prob = .3  # probability of success
+)
+```
+
+What does this outcome of the binomial distribution 
