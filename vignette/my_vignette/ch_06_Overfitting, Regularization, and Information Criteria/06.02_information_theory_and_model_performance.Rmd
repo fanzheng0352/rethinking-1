@@ -178,7 +178,7 @@ I can see how H(p) subtracts out of both H(p,q) and H(p,r), but I cannot grasp h
 
 Just comparing the average log-probabilities of each model will give us a sense of their relative distance from the target. Even though the absolute magnitudes of E log(*q~i~*) and E log(*r~i~*)  will be meaningless. 
 
-We can use a model's deviance to approximate the model's divergence. Below you are summing the logs of the likelihoof of each observed outcome in your data.
+We can use a model's deviance to approximate the model's divergence. Below you are summing the logs of the likelihood of each observed outcome in your data.
 ```{r}
 sppnames <- c("afarensis", "africanus", "habilis", "boisei", "rudolfensis", "ergaster", "sapiens") 
 brainvolcc <- c(438, 452, 612, 521, 752, 871, 1350) 
