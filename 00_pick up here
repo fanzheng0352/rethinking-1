@@ -4,13 +4,13 @@
 
 2019-04-03 I understand R^2 much better after seeing the origins of the simple R^2 formula. R^2 describes explained variance (var - SSE) as a ratio of all variance in the outcome. 
 
-2019-04-03 ick up on understanding how *out-of-sample deviance* can provide a useful target for optimizing model performance. You are at 6.2.2 having just covered how models reflect our ignorance.
+2019-04-03 pick up on understanding how *out-of-sample deviance* can provide a useful target for optimizing model performance. You are at 6.2.2 having just covered how models reflect our ignorance.
 
 2019-04-04  pick up on 6.3 to see how regularizing priors and information criteria address concerns about overfitting in out-of-sample deviance that were raised at the end of 6.2.
 
 2019-04-16 I am trying to create a brief overview of the justification for using deviance. I have had to do a lot of weeding, diving into density functions but I am getting there, and the weeding has been well worth the time. 
 __ I am trying to understand how MAP provides a likelihood function that is used to calculate deviance. 
-__ I think there is a prior and a posterior likelihood function in a Bayesian model, but I need to revisit that portion of the book / my notes. 
+__ I think there is a prior and a posterior likelihood function in a Bayesian model, but I need to revisit Ch. 2.2 & 2.3 fro a refresher. 
 
 
 # For after this course
