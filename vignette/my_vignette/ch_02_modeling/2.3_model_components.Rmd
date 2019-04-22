@@ -1,0 +1,19 @@
+---
+title: "2.3 Components of the model"
+author: "JP"
+date: "4/22/2019"
+output: html_document
+---
+
+# 2.3.1 Likelihood function
+The likelihood function specifies the plausibility of the data. 
+
+For instance if we observed 6 water in 9 globe tosses, we can use the binomial distribution to calculate the plausibility of such data under any value of *p*.
+
+# 2.3.2 Parameters
+Any input to the likelihood function may be a quantity we wish to estimate from data, AKA a parameter. In our case, *n* & *w* are known from data, while *p* remains to be estimated. 
+
+We often add additional parameters inside the likelihood function such as average differences b/w treatment groups, association b/w treatment and outcome, dependence of treatment effects on covariate(s), etc. 
+
+# 2.3.3 Prior
+You must provide a prior for every parameter you intend to estimate. This is an important point I had not previously grasped.  
