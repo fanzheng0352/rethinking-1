@@ -17,3 +17,23 @@ We often add additional parameters inside the likelihood function such as averag
 
 # 2.3.3 Prior
 You must provide a prior for every parameter you intend to estimate. This is an important point I had not previously grasped.  
+
+# 2.4.2 Quadratic Approximation
+```{r}
+library(rethinking)
+globe.qa <- 
+  map(
+    alist(
+      w ~ dbinom(9, p),   # binomial likelihood
+      p ~ dunif(0, 1)     # uniform prior
+    ),
+    data = list(w = 6) 
+  )
+
+# display summary of quadratic approximation
+precis(globe.qa)
+```
+
+Notice how in the model above, there is a prior for the parameter *p* which we are estimating. 
+
+__ Ensure you also understand the likelihood function. 

@@ -1,0 +1,71 @@
+---
+title: "2.4 Making the model go"
+author: "JP"
+date: "5/1/2019"
+output: html_document
+---
+
+```{r message=FALSE}
+library(tidyverse)
+```
+
+How do we get from the inputs of a Bayesian model to its outputs? 
+
+We specify a likelihood function, parameters, priors and provide data, and then we get out a posterior distribution describing the probability of parameter values. 
+
+This book covers 3 different "engines" that condition the prior on the data to produce posterior distributions
+
+# 2.4.1 Grid approximation
+
+We can approximate the infinite values a continuous parameter can take on by considering a finite grid of parameter values. 
+
+At any value of *p* we simply multiply the prior probability of *p* by the likelihood at *p*. Repeating this procedure for the entire grid generates an approximate picture of the posterior. 
+
+```{r}
+# (1) Define the grid. This means you decide how many points to use in estimating the posterior, and then you make a list of the parameter values on the grid. 
+# (2) Compute the value of the prior at each parameter value on the grid. 
+# (3) Compute the likelihood at each parameter value. 
+# (4) Compute the unstandardized posterior at each parameter value, by multiplying the prior by the likelihood.
+# (5) Finally, standardize the posterior, by dividing each value by the sum of all values.
+
+# describe your data of 9 data pts
+success_n = 6
+trials_n = 9
+
+# define your grid
+grid_length = 20
+
+# perform grid approximation
+ds_globe_toss <- 
+  tibble( 
+    parameter_prop = seq(from = 0, to = 1, length.out = grid_length),
+    prior = rep(1, grid_length),
+    likelihood = 
+      dbinom(x = success_n, size = trials_n, prob = parameter_prop),
+    posterior = (likelihood * prior) / sum(likelihood * prior) 
+  )
+
+ds_globe_toss
+```
+
+Explore what is happening above. 
+We start off defining a *grid* of potential parameter values, in our case 0:1 in 20 quantiles.  
+Then we select a *prior*, in our case an ignorant prior: That all parameter values are equally likely.  
+Next we use the *likelihood function* to state the likelihood of the *data* (6 successes in 9 trials) under each conjectured parameter value in the grid. The resulting column, `posterior`, represents the standardized probability of each conjectured parameter value. 
+
+We can see the posterior visualized below, with the MAP value in red
+```{r}
+ds_globe_toss %>% 
+  mutate(map_value = ifelse(posterior == max(posterior), TRUE, FALSE)) %>% 
+  ggplot(aes(x = parameter_prop, y = posterior)) + 
+    geom_line() + 
+    geom_point(aes(color = fct_rev(as.factor(map_value))), size = 3) + 
+    scale_x_continuous(breaks = seq(0, 1, by = .1)) + 
+    scale_y_continuous(limits =c(0, .15)) + 
+    labs(
+      x = "Conjectured parameter values\n(e.g., proportion of globe covered in water)",
+      y = "Posterior probability\nof each parameter value",
+      color = "MAP estimate"
+    ) + 
+  theme_classic()
+```
