@@ -11,8 +11,8 @@ Bayesian models learn from data.
 dunif(seq(0, 1, by = .1), 0, 1)
 ```
 
-Imagine that some binary event has a true probability (*p*) of occuring.But before we know *p*'s true value (if we can ever *know* it), there are many possible values of *p* that we'd consider plausible.
+Imagine that some binary event has a true probability (*p*) of occuring. But before we know *p*'s true value (if we can ever *know* it), there are many possible values of *p* that we'd consider plausible.
 
-Maybe we have no prior knowledge of *p* and consider all values equally plausible, in which case our prior for *p* is a uniform distibution between 0 & 1. As we gain more data, there become relatively fewer or relatively more ways that different values of *p* could produce the data. Values of *p* with more way to produce the data are more plausible, and thus we begin to use more informative priors. 
+Maybe we have no prior knowledge of *p* and consider all values equally plausible, in which case our prior for *p* is a uniform distibution between 0 & 1. As we gain more data, there become relatively fewer or relatively more ways that different values of *p* could produce the data. Values of *p* with more ways to produce the data are more plausible, and thus we begin to use more informative priors. 
 
 Keep in mind what a Bayesian model is asserting: The most probable reality (e.g., the real value of *p*) given the data. MAP estimates say, given the data, the peak of my distribution is the most probable parameter describing the process that produced the data. 
