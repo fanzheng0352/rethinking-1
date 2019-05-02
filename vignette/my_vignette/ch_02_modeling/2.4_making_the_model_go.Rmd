@@ -1,0 +1,124 @@
+---
+title: "2.4 Making the model go"
+author: "JP"
+date: "5/1/2019"
+output: html_document
+---
+
+```{r message=FALSE}
+library(magrittr)
+library(scales)
+library(tidyverse)
+```
+
+How do we get from the inputs of a Bayesian model to its outputs? 
+
+We specify a likelihood function, parameters, priors and provide data, and then we get out a posterior distribution describing the relative probability of all possible parameter values. 
+
+This book covers 3 different "engines" that condition the prior on the data to produce posterior distributions
+
+# 2.4.1 Grid approximation
+
+We can approximate the infinite values a continuous parameter can take on by considering a finite grid of parameter values. 
+
+At any value of *p* we simply multiply the prior probability of *p* by the likelihood at *p*. Repeating this procedure for the entire grid generates an approximate picture of the posterior. 
+
+(1) Define the grid. This means you decide how many points to use in timating the posterior, and then you make a list of the parameter values on e grid. 
+(2) Compute the value of the prior at each parameter value on the grid. 
+(3) Compute the likelihood at each parameter value. 
+(4) Compute the unstandardized posterior at each parameter value, by ltiplying the prior by the likelihood.
+(5) Finally, standardize the posterior, by dividing each value by the sum of l values.
+```{r}
+# define your grid
+grid_length = 20
+
+# perform grid approximation
+ds_globe_toss <- 
+  tibble( 
+    # 1) define the grid
+    parameter_prop = seq(from = 0, to = 1, length.out = grid_length),
+    # 2) compute value of prior at each parameter value in grid
+    prior = rep(1, grid_length),
+    # 3) compute likelihood of data at each parameter value
+    success_n = 6, # describes your 9 data pts
+    trials_n = 9,  # describes your 9 data pts
+    likelihood = 
+      dbinom(x = success_n, size = trials_n, prob = parameter_prop),
+    # 4 & 5) compute standardized posterior
+    post_unstd = likelihood * prior,
+    posterior = post_unstd / sum(post_unstd) 
+  )
+
+ds_globe_toss
+```
+
+Explore what is happening above. 
+We start off defining a *grid* of potential parameter values, in our case 0:1 in 20 quantiles.  
+Then we select a *prior*, in our case an ignorant prior: That all parameter values are equally likely.  
+Next we use the *likelihood function* to state the likelihood of the *data* (6 successes in 9 trials) at each conjectured parameter value in the grid. The resulting column, `posterior`, represents the standardized probability of each conjectured parameter value. 
+
+We can see the posterior visualized below, with the MAP value in red.
+```{r}
+ds_globe_toss %<>% 
+  mutate(map_value = ifelse(posterior == max(posterior), TRUE, FALSE)) 
+
+map_label <- 
+  ds_globe_toss %>% 
+  filter(posterior == max(posterior)) %>% 
+  pull(parameter_prop) %>% 
+  round(2)
+
+ds_globe_toss %>% 
+  ggplot(aes(x = parameter_prop, y = posterior)) + 
+    geom_line() + 
+    geom_point(aes(color = fct_rev(as.factor(map_value))), size = 3) + 
+    scale_x_continuous(breaks = seq(0, 1, by = .1)) + 
+    scale_y_continuous(limits =c(0, .15)) + 
+    labs(
+      x = "Conjectured parameter values\n(e.g., proportion of globe covered in water)",
+      y = "Posterior probability\nof each parameter value",
+      color = "MAP estimate"
+    ) + 
+  theme_classic() + 
+  annotate(geom = "text", x = .7, y = .15, label = map_label)
+```
+
+The unstandardized posterior is of the same shape with the same MAP, but does not integrate to 1. 
+```{r}
+ds_globe_toss %>% 
+  ggplot(aes(x = parameter_prop, y = post_unstd)) + 
+    geom_line() + 
+    geom_point(size = 3) + 
+    scale_x_continuous(breaks = seq(0, 1, by = .1)) + 
+    scale_y_continuous(breaks = pretty_breaks(5)) + 
+    labs(
+      x = "Conjectured parameter values\n(e.g., proportion of globe covered in water)",
+      y = "Posterior probability\nof each parameter value",
+      color = "MAP estimate"
+    ) + 
+  theme_classic()
+```
+
+
+The joint probability of two events is their conditional probability times the absolute probability of the second event, and their order is arbitrary. 
+
+Pr(p,d) = Pr(d,p) = Pr(p|d) Pr(d) = Pr(d|p) Pr(p)
+
+# 2.4.2 Quadratic Approximation
+```{r}
+library(rethinking)
+globe.qa <- 
+  map(
+    alist(
+      w ~ dbinom(9, p),   # binomial likelihood
+      p ~ dunif(0, 1)     # uniform prior
+    ),
+    data = list(w = 6) 
+  )
+
+# display summary of quadratic approximation
+precis(globe.qa)
+```
+
+I keep coming back to this question of why do we need a likelihood function in a Bayesian model? Well the likelihood function computes the likelihood of the data at each conjectured parameter value. So we can then multiply the likelihood of the data given each parameter value and multiply that likelihood by the prior probability of that parameter value to get the posterior probability of that parameter value. All of the posterior probabilities together form the posterior probability distribution. In the case of grid approximation we essentially have a probability mass function, but in reality the posterior probability of a continuous parameter will be more concisely described by a normal distribution. 
+
