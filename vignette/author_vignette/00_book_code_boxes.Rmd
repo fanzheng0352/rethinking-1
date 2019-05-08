@@ -1620,11 +1620,14 @@ d2 <- d[ -i , ]
 
 ## R code 6.32
 sum( dnorm( d2$height , mu , sigma , log=TRUE ) )
+```
 
+
+```{r}
 ## R code 7.1
 library(rethinking)
 data(rugged)
-d <- rugged
+(d <- rugged)
 
 # make log version of outcome
 d$log_gdp <- log( d$rgdppc_2000 )
@@ -1635,7 +1638,10 @@ dd <- d[ complete.cases(d$rgdppc_2000) , ]
 # split countries into Africa and not-Africa
 d.A1 <- dd[ dd$cont_africa==1 , ] # Africa
 d.A0 <- dd[ dd$cont_africa==0 , ] # not Africa
+```
 
+
+```{r}
 ## R code 7.2
 # African nations
 m7.1 <- map(
@@ -1658,7 +1664,22 @@ m7.2 <- map(
         sigma ~ dunif( 0 , 10 )
     ) ,
     data=d.A0 )
+```
 
+```{r}
+# PLot the posterior predictions
+## R code 4.45
+plot( log_gdp ~ rugged , data=d.A1)
+abline( a=coef(m7.1)["a"] , b=coef(m7.1)["bR"] )
+```
+
+```{r}
+## R code 4.45
+plot( log_gdp ~ rugged , data=d.A0)
+abline( a=coef(m7.2)["a"] , b=coef(m7.2)["bR"] )
+```
+
+```{r}
 ## R code 7.3
 m7.3 <- map(
     alist(
@@ -1681,10 +1702,14 @@ m7.4 <- map(
         sigma ~ dunif( 0 , 10 )
     ) ,
     data=dd )
+```
 
+```{r}
 ## R code 7.5
 compare( m7.3 , m7.4 )
+```
 
+```{r}
 ## R code 7.6
 rugged.seq <- seq(from=-1,to=8,by=0.25)
 
@@ -1699,7 +1724,10 @@ mu.NotAfrica.mean <- apply( mu.NotAfrica , 2 , mean )
 mu.NotAfrica.PI <- apply( mu.NotAfrica , 2 , PI , prob=0.97 )
 mu.Africa.mean <- apply( mu.Africa , 2 , mean )
 mu.Africa.PI <- apply( mu.Africa , 2 , PI , prob=0.97 )
+```
 
+
+```{r}
 ## R code 7.7
 m7.5 <- map(
     alist(
@@ -1808,7 +1836,10 @@ lines( 0:1 , mu.ruggedlo.mean , lty=2 )
 shade( mu.ruggedlo.PI , 0:1 )
 lines( 0:1 , mu.ruggedhi.mean , col=rangi2 )
 shade( mu.ruggedhi.PI , 0:1 , col=col.alpha(rangi2,0.25) )
+```
 
+
+```{r}
 ## R code 7.18
 library(rethinking)
 data(tulips)
@@ -1817,54 +1848,60 @@ str(d)
 
 ## R code 7.19
 m7.6 <- map(
-    alist(
-        blooms ~ dnorm( mu , sigma ) ,
-        mu <- a + bW*water + bS*shade ,
-        a ~ dnorm( 0 , 100 ) ,
-        bW ~ dnorm( 0 , 100 ) ,
-        bS ~ dnorm( 0 , 100 ) ,
-        sigma ~ dunif( 0 , 100 )
-    ) ,
-    data=d )
+  alist(
+    blooms ~ dnorm(mu , sigma) ,
+    mu <- a + bW * water + bS * shade ,
+    a ~ dnorm(0 , 100) ,
+    bW ~ dnorm(0 , 100) ,
+    bS ~ dnorm(0 , 100) ,
+    sigma ~ dunif(0 , 100)
+  ) ,
+  data = d
+)
+
 m7.7 <- map(
-    alist(
-        blooms ~ dnorm( mu , sigma ) ,
-        mu <- a + bW*water + bS*shade + bWS*water*shade ,
-        a ~ dnorm( 0 , 100 ) ,
-        bW ~ dnorm( 0 , 100 ) ,
-        bS ~ dnorm( 0 , 100 ) ,
-        bWS ~ dnorm( 0 , 100 ) ,
-        sigma ~ dunif( 0 , 100 )
-    ) ,
-    data=d )
+  alist(
+    blooms ~ dnorm( mu , sigma ) ,
+    mu <- a + bW*water + bS*shade + bWS*water*shade ,
+    a ~ dnorm( 0 , 100 ) ,
+    bW ~ dnorm( 0 , 100 ) ,
+    bS ~ dnorm( 0 , 100 ) ,
+    bWS ~ dnorm( 0 , 100 ) ,
+    sigma ~ dunif( 0 , 100 )
+  ) ,
+  data=d )
 
 ## R code 7.20
 m7.6 <- map(
-    alist(
-        blooms ~ dnorm( mu , sigma ) ,
-        mu <- a + bW*water + bS*shade ,
-        a ~ dnorm( 0 , 100 ) ,
-        bW ~ dnorm( 0 , 100 ) ,
-        bS ~ dnorm( 0 , 100 ) ,
-        sigma ~ dunif( 0 , 100 )
-    ) ,
-    data=d ,
-    method="Nelder-Mead" ,
-    control=list(maxit=1e4) )
-m7.7 <- map(
-    alist(
-        blooms ~ dnorm( mu , sigma ) ,
-        mu <- a + bW*water + bS*shade + bWS*water*shade ,
-        a ~ dnorm( 0 , 100 ) ,
-        bW ~ dnorm( 0 , 100 ) ,
-        bS ~ dnorm( 0 , 100 ) ,
-        bWS ~ dnorm( 0 , 100 ) ,
-        sigma ~ dunif( 0 , 100 )
-    ) ,
-    data=d ,
-    method="Nelder-Mead" ,
-    control=list(maxit=1e4) )
+  alist(
+    blooms ~ dnorm( mu , sigma ) ,
+    mu <- a + bW*water + bS*shade ,
+    a ~ dnorm( 0 , 100 ) ,
+    bW ~ dnorm( 0 , 100 ) ,
+    bS ~ dnorm( 0 , 100 ) ,
+    sigma ~ dunif( 0 , 100 )
+  ) ,
+  data=d ,
+  method="Nelder-Mead" ,
+  control=list(maxit=1e4) )
 
+m7.7 <- map(
+  alist(
+    blooms ~ dnorm( mu , sigma ) ,
+    mu <- a + bW*water + bS*shade + bWS*water*shade ,
+    a ~ dnorm( 0 , 100 ) ,
+    bW ~ dnorm( 0 , 100 ) ,
+    bS ~ dnorm( 0 , 100 ) ,
+    bWS ~ dnorm( 0 , 100 ) ,
+    sigma ~ dunif( 0 , 100 )
+  ) ,
+  data=d ,
+  method="Nelder-Mead" ,
+  control=list(maxit=1e4) )
+```
+
+
+```{r}
 ## R code 7.21
 coeftab(m7.6,m7.7)
 
@@ -1949,7 +1986,10 @@ colnames( model.matrix(~x*z*w) )
 
 ## R code 7.34
 d$lang.per.cap <- d$num.lang / d$k.pop
+```
 
+
+```{r Ch 8}
 ## R code 8.1
 num_weeks <- 1e5
 positions <- rep(0,num_weeks)
@@ -2133,7 +2173,10 @@ m5.8s2 <- map2stan(
     ) ,
     data=d, chains=4,
     start=list(a=10,bl=0,br=0,sigma=1) )
+```
 
+
+```{r}
 ## R code 9.1
 p <- list()
 p$A <- c(0,0,10,0,0)

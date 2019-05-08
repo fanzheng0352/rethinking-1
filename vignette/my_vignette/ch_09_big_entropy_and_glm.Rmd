@@ -1,0 +1,16 @@
+---
+title: "Ch 9 Big Entropy and GLM"
+author: "JP"
+date: "5/8/2019"
+output: html_document
+---
+
+We should start unconventional models with the distribution that has the biggest entropy b/c it spreads probability most evenly while remaining true to the info about the parameters and outcomes that we know. 
+
+This chapter introduces you to `GLM` and `maximum entropy`.
+
+The chapters that follow build computational skills for working with different flavors of GLM. 
+  Ch. 10 addresses models for count variables
+  Ch. 11 addresses models for ordinal variables and mixtures
+  Ch. 12 makes use of binomial count models (and relies on Ch 10)
+  Ch. 12 and onwards deals with multi-level models. 
